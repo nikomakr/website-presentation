@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Declares character encoding: critical for special symbols and non-English text -->
+  <title>Presentation Webpage</title>
+  <!-- Sets the browser title/tab text -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Ensures layout is scaled and responsive on mobile devices -->
+
+  <style>
+    /* Removes default margin, sets background and font for the whole page */
+    body { 
+      margin: 0; 
+      background: #f8f9fa; 
+      font-family: Arial, sans-serif; 
+    }
+    .presentation-container {
+      /* Restricts layout to viewport size, prevents scrolling, and centers content both vertically & horizontally */
+      width: 100vw; height: 100vh; 
+      overflow: hidden; 
+      position: relative;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .slide {
+      /* Each slide is stacked & hidden (opacity 0) by default. Will be shown as necessary */
+      position: absolute; 
+      width: 80vw; height: 80vh; 
+      background: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.08); 
+      border-radius: 12px;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      opacity: 0; transition: opacity 0.5s;
+      pointer-events: none; /* Disable interaction when hidden */
+    }
+    .slide.active {
+      /* Shows the slide by making it fully opaque and interactive */
+      opacity: 1; pointer-events: auto;
+    }
+    .nav-buttons {
+      /* Fixes navigation buttons at bottom center for easy access */
+      position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 20px;
+    }
+    .nav-buttons button {
+      /* Styles navigation buttons for clarity and accessibility */
+      background: #0072ea; color: #fff; border: none; padding: 12px 24px;
+      border-radius: 6px; font-size: 1rem; cursor: pointer; transition: background 0.2s;
+    }
+    .nav-buttons button:disabled {
+      /* Fades and disables buttons when not available (at first/last slide) */
+      background: #ccc; cursor: not-allowed;
+    }
+    @media (max-width: 600px) {
+      /* Ensures slides look good on mobile: expand to almost full width/height, shrink text */
+      .slide { width: 96vw; height: 85vh; font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="presentation-container">
+    <!-- Slide 1: First visible slide. 'active' class makes it show up by default -->
+    <section class="slide active">
+      <h1>Welcome</h1>
+      <p>This is your first slide, like the start of a PowerPoint.</p>
+    </section>
+    <!-- Slide 2 -->
+    <section class="slide">
+      <h1>Features</h1>
+      <ul>
+        <li>Responsive layout</li>
+        <li>Animated transitions</li>
+        <li>Easy navigation</li>
+      </ul>
+    </section>
+    <!-- Slide 3 -->
+    <section class="slide">
+      <h1>Thank You</h1>
+      <p>All content is in one page, with easy slide movement!</p>
+    </section>
+    <!-- Navigation buttons to move between slides -->
+    <div class="nav-buttons">
+      <button id="prevBtn">Previous</button>
+      <button id="nextBtn">Next</button>
+    </div>
+  </div>
+  <script>
+    // Selects all slide sections; used for showing/hiding slides
+    const slides = document.querySelectorAll('.slide');
+    // Tracks the currently visible slide index
+    let current = 0;
+
+    // Shows only the slide at the given index,
+    // disables prev/next buttons at start/end
+    function showSlide(idx) {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === idx);
+      });
+      document.getElementById('prevBtn').disabled = (idx === 0);
+      document.getElementById('nextBtn').disabled = (idx === slides.length - 1);
+    }
+
+    // Moves to the previous slide (unless already at first)
+    document.getElementById('prevBtn').onclick = () => {
+      if (current > 0) { current--; showSlide(current); }
+    }
+    // Moves to the next slide (unless already at last)
+    document.getElementById('nextBtn').onclick = () => {
+      if (current < slides.length - 1) { current++; showSlide(current); }
+    }
+
+    // Optional: keyboard navigation (left/right arrows)
+    // Improves usability for desktop users
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') document.getElementById('nextBtn').click();
+      if (e.key === 'ArrowLeft') document.getElementById('prevBtn').click();
+    });
+  </script>
+</body>
+</html>
