@@ -2,120 +2,307 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!-- Declares character encoding: critical for special symbols and non-English text -->
-  <title>Presentation Webpage</title>
-  <!-- Sets the browser title/tab text -->
-
+  <title>JPMorgan Chase & Co. — Tech & Impact Presentation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Ensures layout is scaled and responsive on mobile devices -->
-
   <style>
-    /* Removes default margin, sets background and font for the whole page */
-    body { 
-      margin: 0; 
-      background: #f8f9fa; 
-      font-family: Arial, sans-serif; 
+    body { margin:0; background:#f8f9fa; font-family:Arial,sans-serif; color:#fff; }
+    .presentation-container { width:100vw; height:100vh; overflow:hidden; position:relative; display:flex; justify-content:center; align-items:center;}
+    .slide { position:absolute; width:80vw; height:80vh; background:#d3e8fa; color:#fff; box-shadow:0 6px 24px rgba(25,60,120,0.27),0 0 2px #99c2f2; border-radius:16px; display:flex; flex-direction:column; justify-content:center; align-items:center; opacity:0; transition:opacity 0.5s; pointer-events:none; padding:2em; text-align:center; overflow:hidden; }
+    .slide.active { opacity:1; pointer-events:auto;}
+    .slide-number { position:absolute; bottom:18px; left:50%; transform:translateX(-50%); font-weight:bold; font-size:1em; color:#1971c2; opacity:0.7; background:rgba(255,255,255,0.08); border-radius:10px; padding:3px 13px; box-shadow:0 1px 7px #a5c5e2; z-index:1; letter-spacing:0.02em; margin:0;}
+    .nav-btn { position:absolute; bottom:40px; padding:12px 28px; background:linear-gradient(180deg, #2994fc 0%, #1769bc 80%); color:#fff; font-weight:bold; border:none; border-radius:12px; font-size:1.1em; box-shadow:0 4px 12px rgba(31,60,120,0.3),0 2px 0px #bbb inset; cursor:pointer; transition:background 0.2s, box-shadow 0.2s, transform 0.1s; outline:none;}
+    .nav-btn:active { box-shadow:0 2px 6px rgba(31,60,120,0.25),0 1px 0px #bbb inset; transform:scale(0.98); background:linear-gradient(180deg, #186bcc 0%, #194d8d 90%);}
+    #prevBtn { left:40px; display:none;}
+    #nextBtn { right:40px;}
+    #nextBtn:disabled, #nextBtn.hidden { background:#ccc; color:#fff; cursor:not-allowed; box-shadow:none; display:none !important;}
+    table { width:80%; margin:1em auto; border-collapse:collapse; background:#fff; box-shadow:0 2px 10px rgba(20,50,110,0.09); border-radius:6px;}
+    th, td { border:1px solid #ccddee; padding:0.5em; text-align:left;}
+    th { background:#e6f0fb; font-weight:bold !important; color:#222 !important;}
+    .slide ul, .slide table, .slide p, .slide li, .slide td, .slide th, .slide em { color:#222 !important; position:relative; z-index:2;}
+    .slide h2, .slide h1 { font-weight:bold; color:#fff !important; text-shadow:1px 1px 10px #357ab8; margin-bottom:0.8em; position:relative; z-index:2;}
+    @media (max-width:600px) { .slide { width:96vw; height:85vh; font-size:0.9rem;} table { font-size:0.8em;} #prevBtn { left:10px;} #nextBtn { right:10px;} .slide-number { font-size:0.9em; padding:2px 7px;} .nav-btn { font-size:1em; padding:11px 16px;} }
+    .slide img { max-width:100%; max-height:30vh; width:auto; height:auto; margin-bottom:25px; border-radius:12px; object-fit:cover; box-shadow:0 2px 10px #357ab8; display:block; z-index:2; position:relative;}
+    .slide.bg-image { background:linear-gradient(180deg,rgba(60,100,170,0.39),rgba(211,232,250,0.80)),url('https://dashboard.thefinanser.com/wp-content/uploads/2019/12/Bank.jpg') center center/cover no-repeat; background-size:cover; background-repeat:no-repeat; background-position:center center;}
+    .slide.bg-image::before { content:""; position:absolute; top:0; left:0; right:0; bottom:0; border-radius:16px; background:linear-gradient(180deg,rgba(20,65,150,0.13) 0%,rgba(211,232,250,0.93) 80%); z-index:1;}
+    .slide.bg-image h2 { margin-top:-4em; margin-bottom:3em; font-size:2em; position:relative; z-index:2;}
+    .second-slide-content { width:100%; max-width:640px; margin:0 auto; display:flex; flex-direction:column; align-items:center; position:relative; z-index:2; }
+    .align-left { width:100%; text-align:left; color:#222; font-size:1.12em; margin-bottom:1.1em; }
+    .align-center { width:100%; text-align:center; color:#222; font-size:1.12em; margin-bottom:1.1em; }
+    .align-right { width:100%; text-align:right; color:#222; font-size:1.12em; margin-bottom:1.1em; }
+    .brown-italic { font-style:italic; text-align:center; color:#904018; font-size:1.13em; margin-top:5em; }
+    .slide.bg-image-3 { background: linear-gradient(180deg,rgba(70,70,70,0.22),rgba(211,232,250,0.95)),url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT18wX1GR3cmnY9TkHaMN-L9DoDCXsuddVjHA&s') center center/cover no-repeat; background-size:cover; background-repeat:no-repeat; background-position:center center;}
+    .slide.bg-image-3::before { content:""; position:absolute; top:0; left:0; right:0; bottom:0; border-radius:16px; background:linear-gradient(180deg,rgba(20,65,150,0.11) 0%,rgba(211,232,250,0.93) 80%); z-index:1;}
+    .slide.bg-image-3 h2 { position:relative; z-index:2;}
+    .slide-3-content { width:100%; max-width:620px; margin:0 auto; position:relative; z-index:2; font-size:1.09em; }
+    .slide-3-content div { margin-bottom:1.2em; color:#222; }
+    .brown-italic-3 { font-style:italic; color:#904018; margin-top:2.5em; font-size:1.14em;}
+    .slide.bg-image-4 { 
+      background: linear-gradient(180deg,rgba(110,110,110,0.08) 0%, rgba(211,232,250,0.97)), 
+      url('https://media.rnztools.nz/rnz/image/upload/s--yeG3EWqE--/c_crop,f_auto,h_3311,q_auto,w_5284,x_136,y_136/v1643789852/4MDPYS8_image_crop_118953?_a=BACCd2AD') center center/cover no-repeat;
+      background-size:cover;
+      background-repeat:no-repeat;
+      background-position:center center;
     }
-    .presentation-container {
-      /* Restricts layout to viewport size, prevents scrolling, and centers content both vertically & horizontally */
-      width: 100vw; height: 100vh; 
-      overflow: hidden; 
-      position: relative;
-      display: flex; justify-content: center; align-items: center;
+    .slide.bg-image-4::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 16px; background: linear-gradient(180deg,rgba(221,244,255,0.30) 0%,rgba(211,232,250,0.9) 95%); z-index: 1;}
+    .slide.bg-image-4 h2 { position:relative; z-index:2;}
+    .slide.bg-image-4 table { position:relative; z-index:2;}
+    .slide.bg-image-5 { 
+      background: linear-gradient(180deg,rgba(100,110,130,0.15) 0%, rgba(211,232,250,0.96)), 
+      url('https://www.eurofinance.com/wp-content/webp-express/webp-images/uploads/1700x956-Meta-1.jpg.webp') center center/cover no-repeat;
+      background-size:cover;
+      background-repeat:no-repeat;
+      background-position:center center;
     }
-    .slide {
-      /* Each slide is stacked & hidden (opacity 0) by default. Will be shown as necessary */
-      position: absolute; 
-      width: 80vw; height: 80vh; 
-      background: #fff;
-      box-shadow: 0 0 10px rgba(0,0,0,0.08); 
-      border-radius: 12px;
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      opacity: 0; transition: opacity 0.5s;
-      pointer-events: none; /* Disable interaction when hidden */
+    .slide.bg-image-5::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: 16px;
+      background: linear-gradient(180deg,rgba(221,244,255,0.22) 0%,rgba(211,232,250,0.93) 95%);
+      z-index: 1;
     }
-    .slide.active {
-      /* Shows the slide by making it fully opaque and interactive */
-      opacity: 1; pointer-events: auto;
+    .slide.bg-image-5 h2 { position:relative; z-index:2;}
+    .slide-5-content { width:100%; max-width:740px; margin:0 auto; position:relative; z-index:2; font-size:1.09em; }
+    .slide-5-content div { margin-bottom:1.3em; }
+    .black-bold { font-weight:bold; color:#111; }
+    .black-desc { color:#111; }
+    .slide.bg-image-6 { 
+      background: linear-gradient(180deg,rgba(70,70,70,0.14) 0%, rgba(211,232,250,0.85) 100%),
+      url('https://cdn.prod.website-files.com/633ba7c875e84d0d18d5d77d/65fb2d5d1cfe64c689fa16d6_social%20impact.png') center center/cover no-repeat;
+      background-size:cover;
+      background-repeat:no-repeat;
+      background-position:center center;
     }
-    .nav-buttons {
-      /* Fixes navigation buttons at bottom center for easy access */
-      position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
-      display: flex; gap: 20px;
+    .slide.bg-image-6::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: 16px;
+      background: linear-gradient(180deg,rgba(221,244,255,0.28) 0%,rgba(211,232,250,0.86) 95%);
+      z-index: 1;
     }
-    .nav-buttons button {
-      /* Styles navigation buttons for clarity and accessibility */
-      background: #0072ea; color: #fff; border: none; padding: 12px 24px;
-      border-radius: 6px; font-size: 1rem; cursor: pointer; transition: background 0.2s;
+    .slide.bg-image-6 h2, .slide.bg-image-6 .slide-6-content { position:relative; z-index:2;}
+    .slide-6-content { width:100%; max-width:740px; margin:0 auto; position:relative; z-index:2; font-size:1.09em; }
+    .slide-6-content div { margin-bottom:1.3em; }
+    .brown-bold { color:#904018; font-weight:bold; }
+    .black-bold6 { font-weight:bold; color:#111;}
+    .black-desc6 { color:#111;}
+    .slide.bg-image-7 { 
+      background: linear-gradient(180deg,rgba(70,70,70,0.18) 0%, rgba(211,232,250,0.88) 100%),
+      url('https://www.bankingexchange.com/media/k2/items/cache/6e932c2bd184c7ea3bc9a63aedff8704_XL.jpg?t=20190929_220236') center center/cover no-repeat;
+      background-size:cover;
+      background-repeat:no-repeat;
+      background-position:center center;
     }
-    .nav-buttons button:disabled {
-      /* Fades and disables buttons when not available (at first/last slide) */
-      background: #ccc; cursor: not-allowed;
+    .slide.bg-image-7::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: 16px;
+      background: linear-gradient(180deg,rgba(221,244,255,0.25) 0%,rgba(211,232,250,0.90) 95%);
+      z-index: 1;
     }
-    @media (max-width: 600px) {
-      /* Ensures slides look good on mobile: expand to almost full width/height, shrink text */
-      .slide { width: 96vw; height: 85vh; font-size: 0.9rem; }
+    .slide.bg-image-7 h2, .slide.bg-image-7 .slide-7-content { position:relative; z-index:2;}
+    .slide-7-content { width:100%; max-width:740px; margin:0 auto; position:relative; z-index:2; font-size:1.09em;}
+    .slide-7-content .label { font-weight:bold; color:#111;}
+    .slide-7-content .desc { color:#111;}
+    .slide-7-content div { margin-bottom:1.25em;}
+    .slide.bg-image-8 { 
+      background: linear-gradient(180deg,rgba(70,70,70,0.16) 0%, rgba(211,232,250,0.89) 100%),
+      url('https://indoreinstitute.com/wp-content/uploads/2020/09/Future-of-Tech-in-the-Work-Environment.jpg') center center/cover no-repeat;
+      background-size:cover;
+      background-repeat:no-repeat;
+      background-position:center center;
     }
+    .slide.bg-image-8::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: 16px;
+      background: linear-gradient(180deg,rgba(221,244,255,0.27) 0%,rgba(211,232,250,0.91) 95%);
+      z-index: 1;
+    }
+    .slide.bg-image-8 h2 { position:relative; z-index:2;}
+    .slide-8-content { width:100%; max-width:740px; margin:0 auto; position:relative; z-index:2; font-size:1.12em; }
+    .slide-8-content div { margin-bottom:2em; color:#222; }
+    .slide-8-content .last-line { margin-top:4em; color:#ff9944; font-style:italic; }
+    .slide.bg-image-9 { 
+      background: linear-gradient(180deg,rgba(70,70,70,0.14) 0%, rgba(211,232,250,0.87) 100%),
+      url('https://www.smiletotalk.com/storage/blogpostimages/say-thank-you-for-your-consideration1726646146-6768.webp') center center/cover no-repeat;
+      background-size:cover;
+      background-repeat:no-repeat;
+      background-position:center center;
+    }
+    .slide.bg-image-9::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: 16px;
+      background: linear-gradient(180deg,rgba(221,244,255,0.26) 0%,rgba(211,232,250,0.89) 95%);
+      z-index: 1;
+    }
+    .slide.bg-image-9 h2 { position:relative; z-index:2; margin-top:-5em; margin-bottom:1.5em;}
+    .slide-9-content { max-width:700px; margin:0 auto; position:relative; z-index:2; color:#222; font-size:1.08em; line-height:1.6; padding-bottom:3em;}
   </style>
 </head>
 <body>
   <div class="presentation-container">
-    <!-- Slide 1: First visible slide. 'active' class makes it show up by default -->
     <section class="slide active">
-      <h1>Welcome</h1>
-      <p>This is your first slide, like the start of a PowerPoint.</p>
+      <img src="https://www.jpmorganchase.com/content/dam/jpmorganchase/images/about/business-principles/banner-how-we-do-business.jpg" alt="JPMorgan Chase Banner">
+      <h1 style="font-size:2.3em;">JPMorgan Chase &amp; Co.</h1>
+      <h2 style="font-size:1.5em;">Transforming Banking through Technology &amp; Social Impact</h2>
     </section>
-    <!-- Slide 2 -->
+    <section class="slide bg-image">
+      <h2>Banking Reimagined</h2>
+      <div class="second-slide-content">
+        <div class="align-left">Global leader in financial services</div>
+        <div class="align-center">$18B annual technology investment</div>
+        <div class="align-right">100+ markets, millions of customers</div>
+        <div class="brown-italic">Purpose: Financial innovation, inclusive growth</div>
+      </div>
+      <div class="slide-number">2</div>
+    </section>
+    <section class="slide bg-image-3">
+      <h2>Tech at the Core — Why JPMorgan Chase is Different</h2>
+      <div class="slide-3-content">
+        <div>Early AI adoption for fraud/security (real-time threat detection)</div>
+        <br>
+        <div>Cloud-first infrastructure—scalable, resilient, secure</div>
+        <br>
+        <div>Proprietary data analytics; millions of daily transactions analysed</div>
+        <br>
+        <div>50,000+ technologists worldwide</div>
+        <br>
+        <div class="brown-italic-3">JPMorgan's tech workforce rivals large engineering firms. Tech is the engine—not just a support function.</div>
+      </div>
+      <div class="slide-number">3</div>
+    </section>
+    <section class="slide bg-image-4">
+      <h2>Divisions & Subsidiaries — Powering a Digital Ecosystem</h2>
+      <table>
+        <tr><th>Division/Subsidiary</th><th>Tech Focus / Innovation</th></tr>
+        <tr><td>Consumer &amp; Community</td><td>Mobile banking, digital payments, Chase UK (app-only)</td></tr>
+        <tr><td>Corporate &amp; Investment</td><td>Algorithmic trading, blockchain, advanced analytics</td></tr>
+        <tr><td>Asset &amp; Wealth Management</td><td>Robo-advisory, digital investing (Nutmeg)</td></tr>
+        <tr><td>WePay</td><td>B2B e-commerce</td></tr>
+        <tr><td>InstaMed</td><td>Health payments</td></tr>
+      </table>
+      <div class="slide-number">4</div>
+    </section>
+    <section class="slide bg-image-5">
+      <h2>Flagship Products</h2>
+      <div class="slide-5-content">
+        <div>
+          <span class="black-bold">Chase UK</span>
+          <span class="black-desc">: Digital-only banking experience, numberless debit/credit cards, AI-powered spending insights</span>
+        </div>
+        <br>
+        <div>
+          <span class="black-bold">WePay &amp; InstaMed</span>
+          <span class="black-desc">: Seamless payment processing for businesses; healthcare, e-commerce, app integration</span>
+        </div>
+        <br>
+        <div>
+          <span class="black-bold">Nutmeg</span>
+          <span class="black-desc">: UK's largest digital wealth manager, using smart algorithms for responsible investing</span>
+        </div>
+      </div>
+      <div class="slide-number">5</div>
+    </section>
+    <section class="slide bg-image-6">
+      <h2>Social Impact — "Tech for Social Good"</h2>
+      <div class="slide-6-content">
+        <div>
+          <span class="black-bold6">"Tech for Social Good" programs</span>
+          <span class="black-desc6">: education, mentorship, hackathons</span>
+        </div>
+        <div>
+          <span class="black-bold6">Strategic partnerships</span>
+          <span class="black-desc6">: Girls Who Code, STEM orgs</span>
+        </div>
+        <div>
+          <span class="black-bold6">Major donations</span>
+          <span class="black-desc6">: $425M+ through Booth Ferris Foundation, STEM-focused scholarships</span>
+        </div>
+        <div>
+          <span class="black-bold6">Global digital literacy campaigns</span>
+        </div>
+        <div class="brown-bold" style="margin-top:2em;">
+          JPMorgan Chase is not just building tech for profit, but tech to elevate society and create opportunities.
+        </div>
+      </div>
+      <div class="slide-number">6</div>
+    </section>
+    <section class="slide bg-image-7">
+      <h2>Core Aims & Values — The Responsible Innovator</h2>
+      <div class="slide-7-content">
+        <div>
+          <span class="label">Financial Inclusion:</span>
+          <span class="desc"> AI-powered microloans, digital onboarding for underserved communities</span>
+        </div>
+        <div>
+          <span class="label">Sustainable Tech:</span>
+          <span class="desc"> Green data centers, ESG investments</span>
+        </div>
+        <div>
+          <span class="label">Diversity in STEM:</span>
+          <span class="desc"> From boardroom to intern pipeline, commitment to inclusive hiring and education</span>
+        </div>
+        <div>
+          <span class="label">Transparency:</span>
+          <span class="desc"> Open reporting, ethical AI standards, privacy-first design</span>
+        </div>
+      </div>
+      <div class="slide-number">7</div>
+    </section>
+    <section class="slide bg-image-8">
+      <h2>The Future — Shaping Next-Gen Finance</h2>
+      <div class="slide-8-content">
+        <div>Investing in quantum computing, advanced encryption, machine learning for risk evaluation</div>
+        <div>Open APIs and collaboration with global fintechs</div>
+        <div>Supporting the digital economy—safe, accessible, reliable platforms for all</div>
+        <div class="last-line">What would financial services look like without this level of tech innovation and social responsibility?</div>
+      </div>
+      <div class="slide-number">8</div>
+    </section>
+    <section class="slide bg-image-9">
+      <h2>Conclusion — Why This Matters to Tech</h2>
+      <p class="slide-9-content">JPMorgan Chase &amp; Co. isn't just redefining banking; it's setting benchmarks in responsible, impactful tech—creating smarter products, uplifting communities, and proving that major innovation can drive real change.</p>
+      <div class="slide-number">9</div>
+    </section>
     <section class="slide">
-      <h1>Features</h1>
-      <ul>
-        <li>Responsive layout</li>
-        <li>Animated transitions</li>
-        <li>Easy navigation</li>
-      </ul>
+      <h2>Thank you</h2>
     </section>
-    <!-- Slide 3 -->
-    <section class="slide">
-      <h1>Thank You</h1>
-      <p>All content is in one page, with easy slide movement!</p>
-    </section>
-    <!-- Navigation buttons to move between slides -->
-    <div class="nav-buttons">
-      <button id="prevBtn">Previous</button>
-      <button id="nextBtn">Next</button>
-    </div>
+    <button id="prevBtn" class="nav-btn">Previous</button>
+    <button id="nextBtn" class="nav-btn">Next</button>
   </div>
   <script>
-    // Selects all slide sections; used for showing/hiding slides
     const slides = document.querySelectorAll('.slide');
-    // Tracks the currently visible slide index
+    const nextBtn = document.getElementById('nextBtn');
     let current = 0;
-
-    // Shows only the slide at the given index,
-    // disables prev/next buttons at start/end
     function showSlide(idx) {
       slides.forEach((slide, i) => {
         slide.classList.toggle('active', i === idx);
       });
-      document.getElementById('prevBtn').disabled = (idx === 0);
-      document.getElementById('nextBtn').disabled = (idx === slides.length - 1);
+      document.getElementById('prevBtn').style.display = (idx === 0) ? "none" : "inline-block";
+      if (idx === slides.length - 1) {
+        nextBtn.classList.add("hidden");
+      } else {
+        nextBtn.classList.remove("hidden");
+        nextBtn.disabled = (idx === slides.length - 2);
+      }
     }
-
-    // Moves to the previous slide (unless already at first)
     document.getElementById('prevBtn').onclick = () => {
       if (current > 0) { current--; showSlide(current); }
-    }
-    // Moves to the next slide (unless already at last)
-    document.getElementById('nextBtn').onclick = () => {
+    };
+    nextBtn.onclick = () => {
       if (current < slides.length - 1) { current++; showSlide(current); }
-    }
-
-    // Optional: keyboard navigation (left/right arrows)
-    // Improves usability for desktop users
+    };
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') document.getElementById('nextBtn').click();
+      if (e.key === 'ArrowRight' && !nextBtn.classList.contains("hidden")) nextBtn.click();
       if (e.key === 'ArrowLeft') document.getElementById('prevBtn').click();
     });
+    showSlide(current);
   </script>
 </body>
 </html>
